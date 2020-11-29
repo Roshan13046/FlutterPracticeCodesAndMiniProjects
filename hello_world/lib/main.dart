@@ -1,83 +1,110 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
-void main() {
-  runApp(new MyApp());
-}
-
-//stf and stl
+void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: "My app",
-      home: new HomePage(),
-      theme: new ThemeData(
-          primarySwatch: Colors.green,
-          brightness: Brightness.light,
-          accentColor: Colors.red),
+      home: new LoginPage(),
+      theme: new ThemeData(primarySwatch: Colors.blue),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  __HomePageState createState() => new __HomePageState();
+  State createState() => new LoginPageState();
 }
 
-class __HomePageState extends State<HomePage> {
-  String myTextData = "Roshan is genious";
+class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  AnimationController _iconAnimationController;
+  Animation<double> _iconAnimation;
 
-  void _changeText() {
-    setState(() {
-      if (myTextData.startsWith("Ro")) {
-        myTextData = "Welcome to Roshan App";
-      } else {
-        myTextData = " Ramesh bhaiyaa welcomes you";
-      }
-    });
-  }
-
-  Widget _bodyWidget() {
-    return new Container(
-      padding: const EdgeInsets.all(8.0),
-      child: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              myTextData,
-              style: new TextStyle(
-                color: Colors.amber,
-                fontSize: 25.0,
-              ),
-            ),
-            new RaisedButton(
-              child: new Text(
-                "Click",
-                style: new TextStyle(
-                  color: Colors.indigo,
-                  fontSize: 15.0,
-                ),
-              ),
-              onPressed: _changeText,
-            )
-          ],
-        ),
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    _iconAnimationController = new AnimationController(
+        vsync: this, duration: new Duration(milliseconds: 500));
+    _iconAnimation = new CurvedAnimation(
+        parent: _iconAnimationController, curve: Curves.easeInOut);
+    _iconAnimation.addListener(() => this.setState(() {}));
+    _iconAnimationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("text Button project"),
-      ),
-      body: _bodyWidget(),
-      floatingActionButton: new FloatingActionButton(
-        child: new Icon(Icons.add),
-        onPressed: _changeText,
+      backgroundColor: Colors.purple,
+      body: new Stack(
+        fit: StackFit.expand, //fits to the stack
+        children: <Widget>[
+          new Image(
+            image: new AssetImage("assets/wrokoutfinal.png"),
+            fit: BoxFit.cover,
+            color: Colors.pink,
+            colorBlendMode: BlendMode.darken,
+          ),
+          new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new FlutterLogo(
+                size: _iconAnimation.value * 100,
+              ),
+              new Form(
+                  child: new Theme(
+                data: new ThemeData(
+                    brightness: Brightness.dark,
+                    primarySwatch: Colors.yellow,
+                    inputDecorationTheme: new InputDecorationTheme(
+                        labelStyle:
+                            new TextStyle(color: Colors.green, fontSize: .0))),
+                child: Container(
+                  padding: const EdgeInsets.all(20.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      new TextFormField(
+                        decoration: new InputDecoration(
+                          hintText:
+                              "Enter Name", //label text will show label of input field
+                        ),
+                      ),
+                      new TextFormField(
+                        decoration: new InputDecoration(
+                          hintText: "Enter Ph-no", //will give hint at top
+                        ),
+                      ),
+                      new TextFormField(
+                        decoration: new InputDecoration(
+                          hintText: "Enter Email",
+                        ),
+                      ),
+                      new TextFormField(
+                        decoration: new InputDecoration(
+                          hintText: "Enter Password",
+                        ),
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
+                      ),
+                      new Padding(padding: const EdgeInsets.only(top: 20.0)),
+                      new MaterialButton(
+                        height: 50.0,
+                        minWidth: 70.0,
+                        color: Colors.greenAccent,
+                        textColor: Colors.white,
+                        child: new Text("Login"),
+                        onPressed: () => {},
+                        splashColor: Colors.deepPurple,
+                      )
+                    ],
+                  ),
+                ),
+              ))
+            ],
+          )
+        ],
       ),
     );
   }
